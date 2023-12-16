@@ -3,8 +3,10 @@ import os
 import discord
 
 intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
+intents.message_content = True
+
+# object that represents a connection to discord
+client = discord.Client(intents=intents)
 
 # pip install -U python-dotenv
 # can read from .env files to get secret variables
@@ -18,15 +20,25 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 # print('the token is:' + TOKEN)
 
-# object that represents a connection to discord
-client = discord.Client(intents=intents)
-
 @client.event
 async def on_member_join(member):
     await member.create_dm()
     await member.dm_channel.send(
         f'Hi {member.name}, welcome to my DEV!'
     )
+
+@client.event
+async def on_message(message):
+    print("i saw a message")
+    print(message.content)
+    # below prevents recursive calls if the bot were to answer itself
+    if message.author == client.user:
+        return
+
+    if message.content == '!respond':
+        response = 'hello'
+        await message.channel.send(response)
+        print('hey I printed something')
 
 @client.event
 # implement on_ready event handler, handles the event when client has established connection and is done prepping data
