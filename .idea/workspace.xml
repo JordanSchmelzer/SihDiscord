@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="discord.py import">
-      <change afterPath="$PROJECT_DIR$/src/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/.env" beforeDir="false" afterPath="$PROJECT_DIR$/src/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/discord.py" beforeDir="false" />
-    </list>
+    <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="adding events" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,7 +120,31 @@
       <option name="project" value="LOCAL" />
       <updated>1702750004576</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="discord.py import">
+      <option name="closed" value="true" />
+      <created>1702759337757</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702759337758</updated>
+    </task>
+    <task id="LOCAL-00005" summary="adding events">
+      <option name="closed" value="true" />
+      <created>1702759372526</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702759372526</updated>
+    </task>
+    <task id="LOCAL-00006" summary="adding events">
+      <option name="closed" value="true" />
+      <created>1702759388146</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1702759388146</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,7 +160,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
+    <MESSAGE value="Addding Evetns" />
     <MESSAGE value="discord.py import" />
-    <option name="LAST_COMMIT_MESSAGE" value="discord.py import" />
+    <MESSAGE value="adding events" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding events" />
   </component>
 </project>

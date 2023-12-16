@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # store token credentials in .env (make it a secret)
-# DISCORD_TOKEN = 'MTE4NTQyOTAyNTY2NjExMzYxNg.G3h6w8.rRI_pxKGmb9ODo_hmwdQAqZF8gi0Tlw4dIv-ms'
 # print(DISCORD_TOKEN)
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
