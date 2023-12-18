@@ -1,11 +1,15 @@
 import discord
 from discord.ext import commands
+from discord import FFmpegPCMAudio
 
 
 class Cmds(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self._last_member = None
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
     async def j(self, ctx):
@@ -30,8 +34,8 @@ class Cmds(commands.Cog):
         vc = user.voice.channel
         print(vc)
 
-        # download the Youtube video
-        # don't actually do this, this breaks Youtube's TOS
+        # download the YouTube video
+        # don't actually do this, this breaks YouTube's TOS
         """
         ydl_opts = {
             'format': 'bestaudio/best',
@@ -50,9 +54,9 @@ class Cmds(commands.Cog):
                     os.rename(file, "song.mp3")
 
         """
-        audio_source = 'song.mp3'
+        # audio_source = 'song.mp3'
 
-        # audio_source = 'heading-south.mp3' # free use as long as credited, credit! freestockmusic.com
+        audio_source = 'heading-south.mp3' # free use as long as credited, credit! freestockmusic.com
         voice_client = discord.utils.get(ctx.voice_clients, guild=ctx.guild)
         print(voice_client)
 

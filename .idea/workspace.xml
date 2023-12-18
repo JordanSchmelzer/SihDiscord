@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="Delete src directory">
-      <change afterPath="$PROJECT_DIR$/src/cogs/cmds.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/cogs/events.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cogs/cmds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cogs/cmds.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -60,8 +57,8 @@
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\.venv" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\secrets" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src" />
+      <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\secrets" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\cogs" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\.venv" />
