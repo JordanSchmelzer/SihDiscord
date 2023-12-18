@@ -1,30 +1,34 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import time
+# main.py
+# import required dependencies
+import os
+import discord  # python3 -m pip install -U discord.py[voice]
+from discord.ext import commands
+from dotenv import load_dotenv  # pip install -U pyton-dotenv, can read .env files to get secrets (tokens)
+import asyncio
 
-hostName = "localhost"
-serverPort = 8000
+load_dotenv()
 
-class MyServer(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type","text/html")
-        self.end_headers()
-        self.wfile.write(bytes("<html><head><title>Discord Bot</title></head></html>","utf-8"))
-        self.wfile.write(bytes("<p>Request: %s</p>" % self.path,"utf-8"))
-        self.wfile.write(bytes("<body>","utf-8"))
-        self.wfile.write(bytes("<p> Test for the web server </p>","utf-8"))
-        self.wfile.write(bytes("</body></html>","utf-8"))
+intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
 
-    #def do_GET()
+# object that represents a connection to discord
+bot = commands.Bot(command_prefix='!', intents=intents)
 
-if __name__ == "__main__":
-    webServer = HTTPServer((hostName, serverPort), MyServer)
-    print("Server started http://%s:%s" % (hostName, serverPort))
+# store token credentials in .env (make it a secret) - gitignore!!!
+TOKEN = os.getenv('DISCORD_TOKEN')
+GUILD = os.getenv('DISCORD_GUILD')
 
-    try:
-        webServer.serve_forever()
-    except KeyboardInterrupt:
-        pass
 
-    webServer.server_close()
-    print("Server stopped.")
+async def load():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await bot.load_extension(f'cogs.{filename[:-3]}')
+            print(f'cogs.{filename[:-3]}')
+
+async def main():
+    await load()
+    await bot.start(TOKEN)
+
+
+asyncio.run(main())
