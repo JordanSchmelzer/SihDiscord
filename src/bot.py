@@ -1,7 +1,7 @@
 # bot.py
 # import required dependencies
 import os
-import discord
+import discord  # python3 -m pip install -U discord.py[voice]
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 import youtube_dl
@@ -38,6 +38,17 @@ async def on_ready():
     print(f'Guild Members:\n - {members}')
 
 
+@client.command()
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    await ctx.channel.connect()
+
+
+@client.command()
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
+
+
 @client.event
 async def on_member_join(member):
     await member.create_dm()
@@ -46,43 +57,53 @@ async def on_member_join(member):
     )
 
 
-@client.event
-async def on_message(message):
+@client.command()
+async def respond(ctx):
     print("i saw a message")
-    print(message.content)
-    # below prevents recursive calls if the bot were to answer itself
-    if message.author == client.user:
-        return
+    await ctx.channel.send("response")
 
-    if message.content == 'respond':
-        response = 'hello'
-        await message.channel.send(response)
-        print('hey I printed something')
 
 @client.command()
-async def play(ctx,url:str):
+async def play(ctx, url: str):
     channel = ctx.message.author.voice.channel
-    voice = await channel.connect()
+    print(channel)
+    user = ctx.message.author
+    print(user)
+    vc = user.voice.channel
+    print(vc)
 
+    audio_source = 'heading-south.mp3'
+    voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    print(voice_client)
+
+    if voice_client:
+        await ctx.send('Saw !play, but already connected to another voice channel')
+        return
+
+    voice_channel = ctx.author.voice.channel
+    voice_client = await voice_channel.connect()
+
+    voice_client.play(discord.FFmpegPCMAudio(audio_source))
+
+
+"""
     # download the youtube video
     ydl_opts = {
-         'format': 'bestaudio/best',
-         'postprocessors':[{
-         'key': 'FFmpegExtractAudio',
-         'preferredcodec': 'mp3',
-         'preferredquality': '192',
-         }]
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }]
     }
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
     for file in os.listdir("./"):
         if file.endswith(".mp3"):
-            os.rename(file,"song.mp3")
+            os.rename(file, "song.mp3")
 
+"""
 
-    source = FFmpegPCMAudio('song.mp3')
-    player = voice.play(source)
-
-# launches the client using the bots token
+# this has to be at the end, or it won't see any of the commands
 client.run(TOKEN)
