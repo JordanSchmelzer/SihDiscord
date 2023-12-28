@@ -1,9 +1,10 @@
 import discord
+import youtube_dl
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 
 
-class Cmds(commands.Cog):
+class CommandsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -20,55 +21,41 @@ class Cmds(commands.Cog):
     async def lv(self, ctx):
         await ctx.voice_client.disconnect()
 
-    @commands.command()
-    async def r(self, ctx):
-        print("i saw a message")
-        await ctx.channel.send("response")
 
     @commands.command()
     async def p(self, ctx):
-        channel = ctx.message.author.voice.channel
-        print(channel)
-        user = ctx.message.author
-        print(user)
-        vc = user.voice.channel
-        print(vc)
+        print("running command p")
 
-        # download the YouTube video
-        # don't actually do this, this breaks YouTube's TOS
-        """
+        '''
         ydl_opts = {
             'format': 'bestaudio/best',
+            'noplaylist': True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }]
         }
-
+        print("done setting ydl options")
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
+            print('im downloading')
         for file in os.listdir("./"):
             if file.endswith(".mp3"):
-                if file != 'heading-south.mp3':
+                if file != 'song.mp3':
                     os.rename(file, "song.mp3")
+                    print('i renamed the file')
+        '''
 
-        """
-        # audio_source = 'song.mp3'
-
-        audio_source = 'heading-south.mp3' # free use as long as credited, credit! freestockmusic.com
-        voice_client = discord.utils.get(ctx.voice_clients, guild=ctx.guild)
-        print(voice_client)
-
-        if voice_client:
-            await ctx.send('Saw !play, but already connected to another voice channel')
-            return
-
-        voice_channel = ctx.author.voice.channel
-        voice_client = await voice_channel.connect()
-
-        voice_client.play(discord.FFmpegPCMAudio(audio_source))
+        audio_source = 'src/cogs/song.mp3'  # free use as long as credited, credit! freestockmusic.com
+        voice = await ctx.channel.connect()
+        src = discord.FFmpegPCMAudio(str())
+        print(voice)
+        voice.play(discord.FFmpegPCMAudio(audio_source))
+        print("im done playing")
 
 
+# The setup function below is necessary. Remember we give bot.add_cog() the name of the class in this case MembersCog.
+# When we load the cog, we use the name of the file.
 async def setup(bot):
-    await bot.add_cog(Cmds(bot))
+    await bot.add_cog(CommandsCog(bot))
