@@ -93,20 +93,6 @@ class Music(commands.Cog):
 
         print('TRACE: End <prefix>p')
 
-    @commands.command()
-    async def pause(self, ctx: commands.Context):
-        server = ctx.message.guild
-        voice = server.voice_client
-        voice.pause()
-        print('pause')
-
-    @commands.command()
-    async def resume(self, ctx: commands.Context):
-        server = ctx.message.guild
-        voice = server.voice_client
-        voice.resume()
-        print('resume')
-
 
 # The setup function below is necessary. Remember we give bot.add_cog() the name of the class in this case MembersCog.
 # When we load the cog, we use the name of the file.

@@ -4,10 +4,12 @@ import discord  # python3 -m pip install -U discord.py[voice]
 from discord.ext import commands, tasks
 import dotenv  # pip install -U pyton-dotenv, can read .env files to get Secrets (tokens)
 import logging
+import json
+
+
 # import youtube_dl pip install git+https://github.com/ytdl-org/youtube-dl.git@master#egg=youtube_dl
 # you have to use this one or it wont work. i think the germans took it down
 
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
@@ -32,6 +34,32 @@ intents.members = True
 # the bot
 bot = commands.Bot(command_prefix=get_prefix, intents=intents)
 
+# custom logging
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+
+
+# copy paste from https://github.com/Darkempire78/Music-Discord-Bot/blob/main/emojis.json
+class CreateEmojiList:
+    def __init__(self, emojiList):
+        self.youtubeLogo = emojiList["YoutubeLogo"]
+        self.true = emojiList["True"]
+        self.false = emojiList["False"]
+        self.alert = emojiList["Alert"]
+
+
+with open("src/Emojis/emojis.json", "r") as emojiList:
+    emojiList = json.load(emojiList)
+    emojiList = {
+        "YoutubeLogo": emojiList["YouTubeLogo"],
+        "True": emojiList["True"],
+        "False": emojiList["False"],
+        "Alert": emojiList["Alert"]
+    }
+
+
+# Emojis
+bot.emojiList = CreateEmojiList(emojiList)
+
 # get token
 dotenv.load_dotenv('./src/Secrets/.env')
 
@@ -55,7 +83,9 @@ async def load_extensions():
                           'Cogs.music',
                           'Cogs.help',
                           'Cogs.volume',
-                          'Cogs.pauseResume']
+                          'Cogs.pauseResume',
+                          'Cogs.joinLeave',
+                          'Cogs.queue', ]
 
     # Here we load our extensions(Cogs) listed above in [initial_extensions].
     if __name__ == '__main__':

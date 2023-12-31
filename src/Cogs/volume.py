@@ -10,7 +10,10 @@ class CogVolume(commands.Cog):
     async def on_ready(self):
         print(f'{self} connected to discord. ready for further action')
 
-    @commands.command()
+    @commands.command(name='v',
+                      usage="<0 to 200>",
+                      description='Modify the source volume level')
+    @commands.cooldown(1, 3, commands.BucketType.member)
     async def v(self, ctx: commands.Context, volume=None):
 
         if volume is None:
