@@ -5,10 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="Delete src directory">
-      <change afterPath="$PROJECT_DIR$/src/cogs/developercomands.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cogs/help.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cogs/pauseResume.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Cogs/volume.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Tools/Check.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cogs/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cogs/music.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cogs/cmds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/cmds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cogs/developercomands.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cogs/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cogs/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/music.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/songs/that.mp3" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +60,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/jorda/PycharmProjects/pythonProject",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -60,11 +70,11 @@
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\.venv" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\secrets" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\songs" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src" />
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\cogs" />
-      <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\secrets" />
     </key>
   </component>
   <component name="RunManager">
@@ -221,5 +231,15 @@
     <MESSAGE value="adding events" />
     <MESSAGE value="Delete src directory" />
     <option name="LAST_COMMIT_MESSAGE" value="Delete src directory" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/Cogs/help.py</url>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
