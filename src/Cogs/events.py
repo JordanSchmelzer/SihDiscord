@@ -10,7 +10,7 @@ class Events(commands.Cog):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         await ctx.send("pong")
 
     @commands.Cog.listener()

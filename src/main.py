@@ -4,6 +4,8 @@ import discord  # python3 -m pip install -U discord.py[voice]
 from discord.ext import commands, tasks
 import dotenv  # pip install -U pyton-dotenv, can read .env files to get Secrets (tokens)
 import logging
+# import youtube_dl pip install git+https://github.com/ytdl-org/youtube-dl.git@master#egg=youtube_dl
+# you have to use this one or it wont work. i think the germans took it down
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 

@@ -94,14 +94,14 @@ class Music(commands.Cog):
         print('TRACE: End <prefix>p')
 
     @commands.command()
-    async def pause(self, ctx):
+    async def pause(self, ctx: commands.Context):
         server = ctx.message.guild
         voice = server.voice_client
         voice.pause()
         print('pause')
 
     @commands.command()
-    async def resume(self, ctx):
+    async def resume(self, ctx: commands.Context):
         server = ctx.message.guild
         voice = server.voice_client
         voice.resume()

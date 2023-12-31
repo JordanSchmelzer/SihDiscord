@@ -1,6 +1,5 @@
 # created by virtualenv automatically
-.venv/Lib
+.venv
 src/Secrets/.env
-src/Songs/song.mp3
-src/Songs/song.mp3
 src/Secrets
+src/Songs

@@ -10,12 +10,12 @@ class CommandsCog(commands.Cog):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def j(self, ctx):
+    async def j(self, ctx: commands.Context):
         await ctx.channel.connect()
         await ctx.send(f'Connected to {ctx.channel}')
 
     @commands.command()
-    async def lv(self, ctx):
+    async def lv(self, ctx: commands.Context):
         await ctx.voice_client.disconnect()
         await ctx.send(f'Disconnected from {ctx.channel}')
 

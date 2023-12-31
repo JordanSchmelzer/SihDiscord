@@ -11,7 +11,7 @@ class CogVolume(commands.Cog):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def v(self, ctx, volume=None):
+    async def v(self, ctx: commands.Context, volume=None):
 
         if volume is None:
             return await ctx.send(f"{ctx.author.mention} This command requires an argument.\n Ex: !volume 30 (sets "

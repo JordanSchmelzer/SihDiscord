@@ -13,7 +13,7 @@ class CogPauseResume(commands.Cog):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def r(self, ctx):
+    async def r(self, ctx: commands.Context):
 
         # get the guild's VoiceClient
         voice_client = ctx.guild.voice_client
@@ -27,7 +27,7 @@ class CogPauseResume(commands.Cog):
             await ctx.send('The bot is not connected to a voice channel or is not playing audio.')
 
     @commands.command()
-    async def pt(self, ctx):
+    async def pt(self, ctx: commands.Context):
 
         audio_source = 'src/Songs/test.mp3'
         src = discord.FFmpegPCMAudio(audio_source)

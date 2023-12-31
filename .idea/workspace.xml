@@ -5,20 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="Delete src directory">
-      <change afterPath="$PROJECT_DIR$/src/Cogs/help.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Cogs/pauseResume.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Cogs/volume.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Tools/Check.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cogs/cmds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/cmds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cogs/developercomands.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cogs/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cogs/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/music.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip-3.11.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip3.11.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip3.11.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/pip3.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/pip3.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/youtube-dl.exe" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/youtube-dl.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/etc/bash_completion.d/youtube-dl.bash-completion" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/etc/fish/completions/youtube-dl.fish" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/share/doc/youtube_dl/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/share/man/man1/youtube-dl.1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/songs/that.mp3" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +59,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/jorda/PycharmProjects/pythonProject",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -231,15 +230,5 @@
     <MESSAGE value="adding events" />
     <MESSAGE value="Delete src directory" />
     <option name="LAST_COMMIT_MESSAGE" value="Delete src directory" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/Cogs/help.py</url>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

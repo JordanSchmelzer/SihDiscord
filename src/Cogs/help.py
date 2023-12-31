@@ -12,7 +12,7 @@ class HelpCog(commands.Cog, name="help command"):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def h(self, ctx, commandName=None):
+    async def h(self, ctx: commands.Context, commandName=None):
 
         await ctx.channel.send(f"Here's a list of my commands:")
 
