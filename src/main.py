@@ -85,7 +85,8 @@ async def load_extensions():
                           'Cogs.volume',
                           'Cogs.pauseResume',
                           'Cogs.joinLeave',
-                          'Cogs.queue', ]
+                          'Cogs.queue',
+                          ]
 
     # Here we load our extensions(Cogs) listed above in [initial_extensions].
     if __name__ == '__main__':

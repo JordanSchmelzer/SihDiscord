@@ -1,5 +1,6 @@
 # created by virtualenv automatically
 .venv
+.idea
 src/Secrets/.env
 src/Secrets
 src/Songs

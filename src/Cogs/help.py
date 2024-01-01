@@ -2,7 +2,7 @@ from discord.ext import commands
 
 
 class HelpCog(commands.Cog, name="help command"):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     prefixes = ['$', '?', '.', '!']
