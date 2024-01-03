@@ -56,7 +56,6 @@ with open("src/Emojis/emojis.json", "r") as emojiList:
         "Alert": emojiList["Alert"]
     }
 
-
 # Emojis
 bot.emojiList = CreateEmojiList(emojiList)
 
@@ -82,22 +81,31 @@ async def load_extensions():
                           'Cogs.events',
                           'Cogs.music',
                           'Cogs.help',
-                          'Cogs.volume',
-                          'Cogs.pauseResume',
+                          # 'Cogs.volume',
+                          # 'Cogs.pauseResume',
                           'Cogs.joinLeave',
-                          'Cogs.queue',
+                          # 'Cogs.queue',
                           ]
-
     # Here we load our extensions(Cogs) listed above in [initial_extensions].
     if __name__ == '__main__':
         for extension in initial_extensions:
             await bot.load_extension(extension)
 
 
+async def clear_songs():
+    for file in os.listdir('./src/Songs'):
+        if file.endswith(".mp3"):
+            os.remove('./src/Songs/' + file)
+
 async def main():
     async with bot:
         await load_extensions()
+        # await clear_songs()
         await bot.start(TOKEN)
+        bot.run(token=TOKEN,
+                reconnect=True,
+                log_handler=handler,
+                )
 
 
 asyncio.run(main())

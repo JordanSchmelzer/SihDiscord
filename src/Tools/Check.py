@@ -1,17 +1,16 @@
 import discord
-import wavelink
+from discord.ext import commands
 
 
 class Check:
-
-    async def userInVoiceChannel(self, ctx, bot):
+    async def userInVoiceChannel(self, ctx: commands.Context, bot: commands.Bot):
         """Check if the user is in a voice channel"""
         if ctx.author.voice:
             return True
-        await ctx.channel.send(f"{bot.emojiList.false} {ctx.author.mention} You are not connected in a voice channel!")
+        await ctx.channel.send(f"{ctx.author.mention} You are not connected in a voice channel!")
         return False
 
-    async def botInVoiceChannel(self, ctx, bot):
+    async def botInVoiceChannel(self, ctx: commands.Context, bot):
         """Check if the bot is in a voice channel"""
         player = bot.wavelink.get_player(ctx.guild.id)
 

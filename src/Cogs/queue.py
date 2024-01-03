@@ -7,40 +7,48 @@ import discord
 class QueueCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.data = []
+        self.queue = deque(maxlen=15)
 
-    def add_data(self, data):
-        self.data.append(data)
-
-    def get_data(self):
-        return self.data
+    def check_queue(self, ctx: commands.Context):
+        # if queue is not empty
+        if not self.queue:
+            q = self.queue
+            voice = ctx.guild.voice_client
+            source = q.pop()
+            voice.play(source)
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'{self} connected to discord. ready for further action')
 
     @commands.command()
-    async def q(self, ctx: commands.Context):
+    async def q(self, ctx: commands.Context, url: str):
         try:
-            # voice = ctx.guild.voice_client
-            audio_source = 'src/Songs/song.mp3'
+            audio_source = url
             source = discord.FFmpegPCMAudio(audio_source)
+            self.queue.append(source)
+            for elem in self.queue:
+                print(elem)
+        except Exception as e:
+            logging.error('ERROR:' + str(e))
 
-            guild_id = ctx.message.guild.id
-            logging.info(guild_id)
+    @commands.command()
+    async def qp(self, ctx: commands.Context):
+        try:
+            if not self.is_connected(ctx):
+                voice_channel = ctx.author.voice.channel
+                if not voice_channel:
+                    return
+                voice = await ctx.channel.connect()
+            else:
+                voice = ctx.guild.voice_client
 
-            # if guild_id in self.data:
-                # self.data[guild_id].add_data(1)
-            # else:
-                # self.data[guild_id].add_data(2)
-
-            self.data.append(source)
-
-            for element in self.data:
-                print(element)
+            voice.play(self.queue.popleft(), after=lambda x=None: self.check_queue(ctx))
+            voice.source = discord.PCMVolumeTransformer(voice.source)
+            voice.source.volume = 1.0
 
         except Exception as e:
-            logging.error('Error:' + str(e))
+            logging.error(e)
 
 
 async def setup(bot):
