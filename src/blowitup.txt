@@ -78,10 +78,15 @@ class Music:
         ydl_opts = {
             'format': y_opts["format"],
             'postprocessors': [{
-                'key': y_opts["key"],
-                'preferredcodec': y_opts["preferredcodec"],
-                'preferredquality': y_opts["preferredquality"],
-            }],
+                'key': 'FFmpegMetadata',
+                'add_metadata': True,
+            },
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '0',
+            },
+            ],
             'progress_hooks': [my_hook],
             'noplaylist': True,
             'no_warnings:': True,
