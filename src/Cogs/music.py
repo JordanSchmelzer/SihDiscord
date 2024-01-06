@@ -204,7 +204,7 @@ class Music(commands.Cog):
         return player
 
     @commands.command()
-    async def j(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
+    async def join(self, ctx: commands.Context, *, channel: discord.VoiceChannel = None):
         """Connect to voice.
         Parameters
         ------------
@@ -237,7 +237,7 @@ class Music(commands.Cog):
         await ctx.send(f'Connected to: **{channel}**', delete_after=20)
 
     @commands.command()
-    async def p(self, ctx: commands.Context, *, search: str):
+    async def play(self, ctx: commands.Context, *, search: str):
         """Request a song and add it to the queue.
         This command attempts to join a valid voice channel if the bot is not already in one.
         Uses YTDL to automatically search and retrieve a song.
@@ -254,7 +254,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc:
-            await ctx.invoke(self.j)
+            await ctx.invoke(self.join)
             """Retrieve the guild player, or generate one."""
 
         player = self.get_player(ctx)
@@ -349,7 +349,7 @@ class Music(commands.Cog):
                                    f'requested by `{vc.source.requester}`')
 
     @commands.command()
-    async def v(self, ctx: commands.Context, vol: float):
+    async def volume(self, ctx: commands.Context, vol: float):
         """Change the player volume.
         Parameters
         ------------

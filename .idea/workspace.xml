@@ -6,9 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="a278c681-8b64-4f26-ba38-a7e40564ab62" name="Changes" comment="Delete src directory">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/downloads/youtube-ESKp2wE_Ltg-Nicki_Minaj_-_FTCU_Lyrics.webm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cogs/help.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/help.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cogs/joinLeave.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Cogs/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cogs/music.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Songs/test.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blowitup.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/blowitup.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cogs/pauseResume.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cogs/queue.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Cogs/volume.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tools/Check.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blowitup.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,23 +49,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.bot.executor": "Run",
-    "Python.cmds.executor": "Run",
-    "Python.developercomands.executor": "Run",
-    "Python.discord.executor": "Run",
-    "Python.evie.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.music.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Lavalink",
-    "last_opened_file_path": "C:/Users/jorda/PycharmProjects/pythonProject/src/Songs",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.bot.executor&quot;: &quot;Run&quot;,
+    &quot;Python.cmds.executor&quot;: &quot;Run&quot;,
+    &quot;Python.developercomands.executor&quot;: &quot;Run&quot;,
+    &quot;Python.discord.executor&quot;: &quot;Run&quot;,
+    &quot;Python.evie.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.music.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Lavalink&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/jorda/PycharmProjects/pythonProject/src/Songs&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\jorda\PycharmProjects\pythonProject\src\Songs" />
@@ -228,16 +235,5 @@
     <MESSAGE value="adding events" />
     <MESSAGE value="Delete src directory" />
     <option name="LAST_COMMIT_MESSAGE" value="Delete src directory" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/Cogs/music.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
