@@ -10,6 +10,7 @@ import traceback
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 import json
+import os
 
 
 # define ydl console behavoir
@@ -65,28 +66,55 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=True):
+        print("[TRACE]: Youtube-DL: Creating Youtube Audio Source")
         loop = loop or asyncio.get_event_loop()
 
-        to_run = partial(ytdl.extract_info, url=search, download=download)
-        data = await loop.run_in_executor(None, to_run)
+        # no_download_data
+        no_data_to_run = partial(ytdl.extract_info, url=search, download=False)
+        no_download_data = await loop.run_in_executor(None, no_data_to_run)
 
-        if "entries" in data:
-            # take first item from a playlist
-            data = data["entries"][0]
+        if "entries" in no_download_data:
+            no_download_data = no_download_data["entries"][0]
 
-        await ctx.send(f'Added {data["title"]} to the Queue.', delete_after=15)
+        # if not present, download it
+        if os.path.exists(f'./src/Songs/{no_download_data["id"]}.mp3'):
+            ytdl_download_opt = False
+            
+            await ctx.send(
+                f'Added {no_download_data["title"]} to the Queue.', delete_after=15
+            )
+            
+            source = f'./src/Songs/{no_download_data["id"]}.mp3'
+            
+            print(f"[TRACE]: Youtoube-DL: Audio already ripped: id={no_download_data["id"]}")
 
-        if download:
-            # source = ytdl.prepare_filename(data)
-            source = f'./src/Songs/{data["id"]}.mp3'
+            return cls(
+                discord.FFmpegPCMAudio(source),
+                data=no_download_data,
+                requester=ctx.author,
+            )
         else:
-            return {
-                "webpage_url": data["webpage_url"],
-                "requester": ctx.author,
-                "title": data["title"],
-            }
+            ytdl_download_opt = download
+            to_run = partial(ytdl.extract_info, url=search, download=ytdl_download_opt)
+            data = await loop.run_in_executor(None, to_run)
 
-        return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
+            if "entries" in data:
+                # take first item from a playlist
+                data = data["entries"][0]
+
+            # TODO: clean this garbage up
+            if download:
+                # source = ytdl.prepare_filename(data)
+                source = f'./src/Songs/{data["id"]}.mp3'
+            else:
+                return {
+                    "webpage_url": data["webpage_url"],
+                    "requester": ctx.author,
+                    "title": data["title"],
+                }
+            print(f"[TRACE]: Youtube-DL: Audio Source Downloaded: id={data["id"]}")
+
+            return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
 
 class MusicPlayer:
@@ -109,12 +137,14 @@ class MusicPlayer:
     )
 
     def __init__(self, ctx: commands.Context):
+        MAX_SIZE = 50
+
         self.bot = ctx.bot
         self._guild = ctx.guild
         self._channel = ctx.channel
         self._cog = ctx.cog
 
-        self.queue = asyncio.Queue()
+        self.queue = asyncio.Queue(maxsize=MAX_SIZE)
         self.next = asyncio.Event()
 
         self.np = None  # Now playing message
@@ -124,24 +154,32 @@ class MusicPlayer:
         ctx.bot.loop.create_task(self.player_loop())
 
     async def player_loop(self):
+        DOWNLOAD_TIMEOUT = 300
+
         """Our main player loop."""
         await self.bot.wait_until_ready()
+        print('[TRACE]: Music player: bot is ready')
 
         while not self.bot.is_closed():
             self.next.clear()
 
+            # Wait for the next song. If we timeout cancel the player and disconnect...
             try:
-                # Wait for the next song. If we timeout cancel the player and disconnect...
-                async with timeout(300):  # 5 minutes...
+                
+                async with timeout(DOWNLOAD_TIMEOUT):
+                    print('[TRACE]: Music player: waiting for next song')
                     source = await self.queue.get()
-                    logging.critical("got this source from the queue: " + str(source))
+                    print('[TRACE]: Music player: song ended, getting new song from queue')
+                    
             except asyncio.TimeoutError:
-                logging.fatal("await self.queue.get() failed")
+                print(f"[FATAL]: exceeded timeout limit of {DOWNLOAD_TIMEOUT}")
+                
                 return self.destroy(self._guild)
-
-            source.volume = self.volume
+            
             self.current = source
+            source.volume = self.volume
 
+            print(f"[TRACE]: Music player: playing {source}")
             self._guild.voice_client.play(
                 source,
                 after=lambda _: self.bot.loop.call_soon_threadsafe(self.next.set),
@@ -163,6 +201,7 @@ class MusicPlayer:
                 pass
 
     def destroy(self, guild):
+        print(f'[TRACE]: Destroying Music Player attached to guild {guild}')
         """Disconnect and cleanup the player."""
         return self.bot.loop.create_task(self._cog.cleanup(guild))
 
@@ -269,7 +308,6 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx: commands.Context, *, search: str):
         """Request a song and add it to the queue.
-        This command attempts to join a valid voice channel if the bot is not already in one.
         Uses YTDL to automatically search and retrieve a song.
         Parameters
         ------------
@@ -285,8 +323,8 @@ class Music(commands.Cog):
 
         if not vc:
             await ctx.invoke(self.join)
-            """Retrieve the guild player, or generate one."""
 
+        """Retrieve the guild player, or generate one."""
         player = self.get_player(ctx)
 
         # If download is False, source will be a dict which will be used later to regather the stream.
