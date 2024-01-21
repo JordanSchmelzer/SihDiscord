@@ -58,7 +58,9 @@ class CommandsCog(commands.Cog):
                     with open("./src/data/playlists.json", "w") as f:
                         json.dump(database, f, indent=4)
                 else:
-                    new_user = {f"{msg_author}": {"user_tracklist": {"track1": arg2}}}
+                    new_user = {
+                        f"{msg_author}": {"user_tracklist": {"track1": arg2[0]}}
+                    }
                     print(f"Playlist created: {new_user}")
                     database.update(new_user)
 

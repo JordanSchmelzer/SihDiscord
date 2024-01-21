@@ -1,9 +1,14 @@
 {
     "clam_daddy": {
         "user_tracklist": {
-            "track1": "https://www.youtube.com/watch?v=X3BA7_A9kVw&list=RDX3BA7_A9kVw&start_radio=1",
-            "track2": "https://www.youtube.com/watch?v=X3BA7_A9kVw&list=RDX3BA7_A9kVw&start_radio=1",
+            "track1": "https://www.youtube.com/watch?v=aBy53cNYHc8&list=RDX3BA7_A9kVw&index=7",
+            "track2": "https://www.youtube.com/watch?v=s-9aoZW1C-A&list=RDESnIQeYoWy8&index=4",
             "track3": "https://www.youtube.com/watch?v=X3BA7_A9kVw&list=RDX3BA7_A9kVw&start_radio=1"
+        }
+    },
+    "clam_qa": {
+        "user_tracklist": {
+            "track1": "https://www.youtube.com/watch?v=s-9aoZW1C-A&list=RDESnIQeYoWy8&index=4"
         }
     }
 }
