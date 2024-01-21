@@ -38,6 +38,7 @@ ydl_opts = {
     "no_warnings": True,
     "default_search": "auto",
     "source_address": "0.0.0.0",  # ipv6 addresses cause issues sometimes
+    #"proxy":"169.0.0.100:8080",
 }
 
 ffmpegopts = {"before_options": "-nostdin", "options": "-vn"}

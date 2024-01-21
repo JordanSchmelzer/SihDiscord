@@ -1,7 +1,7 @@
 import asyncio
 import os
 import discord  # python3 -m pip install -U discord.py[voice]
-from discord.ext import commands, tasks
+from discord.ext import commands
 import dotenv  # pip install -U pyton-dotenv, can read .env files to get Secrets (tokens)
 import logging
 import json
