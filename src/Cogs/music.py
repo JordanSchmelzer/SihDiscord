@@ -505,13 +505,64 @@ class Music(commands.Cog):
             logging.fatal(e)
 
     @commands.command()
-    async def p(self, ctx: commands.Context, args):
-        """Get a YouTube link from a query."""
+    async def search(self, ctx: commands.Context, args):
+        '''
+        Getting information about video or its formats using video link or video ID.
+
+        `Video.get` method will give both information & formats of the video
+        `Video.getInfo` method will give only information about the video.
+        `Video.getFormats` method will give only formats of the video.
+
+        You may either pass link or ID, method will take care itself.
+
+        YouTube doesn't provide uploadDate and publishDate in its InnerTube API, thus we have to use HTML requests to get it.
+        This is disabled by default as it is very inefficient, but if you really need it, you can explicitly set parameter to Video.get() function: get_upload_date=True
+        By default, we use InnerTube API for Video.get() and Video.getFormats(), meanwhile we use HTML parsing on Video.getInfo()
+        You can set get_upload_date ONLY TO Video.get(), as you don't get info with Video.getFormats()
+        
+        
+        video = Video.get('https://www.youtube.com/watch?v=z0GKGpObgPY', mode = ResultMode.json, get_upload_date=True)
+        print(video)
+        videoInfo = Video.getInfo('https://youtu.be/z0GKGpObgPY', mode = ResultMode.json)
+        print(videoInfo)
+        videoFormats = Video.getFormats('z0GKGpObgPY')
+        print(videoFormats)
+        '''
+        
+        LIMIT = 3
+        
         await ctx.send(f"Searching...", delete_after=10)
+        try:
+            # with open('./src/data/video_data.json',"r") as f:
+                # data = json.load(f)
 
-        links = VideosSearch(args, limit=3)
+            video_search = VideosSearch(args, limit=LIMIT, region='US')
+            
+            data = {}
+            data = video_search.result()
+            
+            with open('./src/data/video_data.json',"w") as f:
+                # json.dump(data,f, indent=4)
+                json.dump(data, f, indent=2)
+                
+            # Extract info we care about into dict
+            i = 0
+            result_dict = {}
+            while(i <= (LIMIT - 1)):
+                this_result_dict = {
+                    "id": data["result"][i]['id'],
+                    "title":data["result"][i]["title"],
+                    "duration": data["result"][i]["duration"],
+                    "views":data["result"][i]["viewCount"]
+                }
+                result_dict[i] = this_result_dict
+    
+                i= i + 1
 
-        print(links.result())
+            ctx.send('')
+
+        except Exception as e:
+            print(e)
 
 
 async def setup(bot):
