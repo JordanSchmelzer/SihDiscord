@@ -84,6 +84,7 @@ async def load_extensions():
         "Cogs.events",
         "Cogs.music",
         "Cogs.help",
+        # "Cogs.",
     ]
     # Here we load our extensions(Cogs) listed above in [initial_extensions].
     if __name__ == "__main__":

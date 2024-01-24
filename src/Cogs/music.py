@@ -118,6 +118,24 @@ class YTDLSource(discord.PCMVolumeTransformer):
             return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
 
+class YoutubeSearchHandler:
+    __slots__ = (
+        "bot",
+        "foo"
+        "data"
+    )
+    
+    def __init__(self, ctx: commands.Context):
+        __bot__ = self.bot
+        print(__bot__)
+        __data__ = {}
+  
+    @classmethod
+    async def create_source(cls, ctx, search: str, *, loop, download=True, __data__):
+        print("[TRACE]: YoutubeSearch: searching for top n")
+  
+        return __data__
+
 class MusicPlayer:
     """A class which is assigned to each guild using the bot for Music.
     This class implements a queue and loop, which allows for different guilds to listen to different playlists
@@ -547,19 +565,29 @@ class Music(commands.Cog):
                 
             # Extract info we care about into dict
             i = 0
+            message = ""
             result_dict = {}
             while(i <= (LIMIT - 1)):
+                data_id = data["result"][i]['id']
+                data_title = data["result"][i]["title"]
+                data_duration = data["result"][i]["duration"]
+                data_views = data["result"][i]["viewCount"]["text"]
+                
                 this_result_dict = {
-                    "id": data["result"][i]['id'],
-                    "title":data["result"][i]["title"],
-                    "duration": data["result"][i]["duration"],
-                    "views":data["result"][i]["viewCount"]
+                    "id": data_id,
+                    "title":data_title,
+                    "duration": data_duration,
+                    "views": data_views
                 }
                 result_dict[i] = this_result_dict
     
+                message = message + (f"Track[{i + 1}]:\ntitle: {data_title}\nduration:{data_duration}\nviews: {data_views}\nfuture_button_here\n\n")
+    
                 i= i + 1
-
-            ctx.send('')
+            
+            message = "Choose a result to play or press 0 to cancel:" + '\n\n' + message + 'future exit button here'
+            
+            await ctx.send(message, delete_after=15)
 
         except Exception as e:
             print(e)
