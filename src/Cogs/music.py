@@ -45,7 +45,6 @@ ffmpegopts = {"before_options": "-nostdin", "options": "-vn"}
 
 ytdl = YoutubeDL(ydl_opts)
 
-
 class VoiceConnectionError(commands.CommandError):
     """Custom Exception class for connection errors."""
 
@@ -117,6 +116,66 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
             return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
+class OptionButton(discord.ui.Button):
+    def __init__(self, arg: str):
+        super().__init__(label=arg, style=discord.ButtonStyle.blurple, row=1)
+        
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.send_message("Adding Track to Queue", delete_after=10)
+        
+        await interaction.message.delete()
+
+class OptionView(discord.ui.View):
+    def __init__(self, args: dict):
+        super().__init__()
+        
+        self.track1 = args[0]["title"]
+        self.track1dur = args[0]["duration"]
+        self.track1views = args[0]["views"]
+        
+        self.track2 = args[1]["title"]
+        self.track2dur = args[1]["duration"]
+        self.track2views = args[1]["views"]
+        
+        self.track3 = args[2]["title"]
+        self.track3dur = args[2]["duration"]
+        self.track3views = args[2]["views"]
+        
+        self.add_item(OptionButton(self.track1))
+        self.add_item(OptionButton(self.track2))
+        self.add_item(OptionButton(self.track3))
+    
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, row=4, disabled=False, emoji="✖️")
+    async def close_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.message.delete()
+
+class SongSelectMenu(discord.ui.View):
+    def __init__(self, args: dict):
+        super().__init__()
+        self.args = args
+        track1 = args[0]["title"]
+
+        
+        # self.add_item(discord.ui.Button(label="Some Text"))
+
+    @discord.ui.button(label=f"Add Track", style=discord.ButtonStyle.blurple,row=1)
+    async def inviteBtn(self, interaction: discord.Interaction, button: discord.ui.Button):
+        # basically ctx.send
+        await interaction.response.send_message("Adding Track to Queue")
+        
+    @discord.ui.button(label="Add Track", style=discord.ButtonStyle.blurple,row=2)
+    async def inviteBtn2(
+        self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message("Adding Track to Queue")
+    
+    @discord.ui.button(label="Add Track", style=discord.ButtonStyle.blurple, row=3)
+    async def inviteBtn3(
+        self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message("Adding Track to Queue")
+
+    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, row=4, disabled=False, emoji="✖️")
+    async def close_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.edit_message(view=None)
 
 class YoutubeSearchHandler:
     __slots__ = (
@@ -284,6 +343,24 @@ class Music(commands.Cog):
             self.players[ctx.guild.id] = player
 
         return player
+
+    @commands.command()
+    async def cmds(self, ctx: commands.Context, args):
+        try:
+            view = OptionView(args)
+            await ctx.send(view=view, delete_after=300)
+        except Exception as e:
+            print(e)
+        
+    @commands.command()
+    async def invite(self, ctx: commands.Context, args):
+        print("invite triggered")
+        try:
+            results = {"hello":"world"}
+            buttons = SongSelectMenu(results)
+            await ctx.send("click the thing", view=buttons) 
+        except Exception as e:
+            print(e)
 
     @commands.command()
     async def join(
@@ -549,13 +626,10 @@ class Music(commands.Cog):
         
         LIMIT = 3
         
-        await ctx.send(f"Searching...", delete_after=10)
+        await ctx.send(f"Searching...", delete_after=3)
         try:
-            # with open('./src/data/video_data.json',"r") as f:
-                # data = json.load(f)
 
             video_search = VideosSearch(args, limit=LIMIT, region='US')
-            
             data = {}
             data = video_search.result()
             
@@ -565,14 +639,12 @@ class Music(commands.Cog):
                 
             # Extract info we care about into dict
             i = 0
-            message = ""
             result_dict = {}
             while(i <= (LIMIT - 1)):
                 data_id = data["result"][i]['id']
                 data_title = data["result"][i]["title"]
                 data_duration = data["result"][i]["duration"]
                 data_views = data["result"][i]["viewCount"]["text"]
-                
                 this_result_dict = {
                     "id": data_id,
                     "title":data_title,
@@ -580,18 +652,13 @@ class Music(commands.Cog):
                     "views": data_views
                 }
                 result_dict[i] = this_result_dict
-    
-                message = message + (f"Track[{i + 1}]:\ntitle: {data_title}\nduration:{data_duration}\nviews: {data_views}\nfuture_button_here\n\n")
-    
                 i= i + 1
-            
-            message = "Choose a result to play or press 0 to cancel:" + '\n\n' + message + 'future exit button here'
-            
-            await ctx.send(message, delete_after=15)
 
+            menu_view = OptionView(result_dict) 
+            await ctx.send(view=menu_view, delete_after=60)
+            
         except Exception as e:
             print(e)
-
 
 async def setup(bot):
     await bot.add_cog(Music(bot))
