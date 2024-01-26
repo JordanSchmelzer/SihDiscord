@@ -117,69 +117,46 @@ class YTDLSource(discord.PCMVolumeTransformer):
             return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
 
 class OptionButton(discord.ui.Button):
-    def __init__(self, data: dict):
-        super().__init__(label=data["title"], style=discord.ButtonStyle.blurple, row=1)
+    def __init__(self, data: dict, row: str):
+        ROWNUM=int(row)
+        super().__init__(label=data["title"], style=discord.ButtonStyle.blurple, row=ROWNUM)
+        self.value = data["id"]
+        print(data["id"])
         
-    def add_to_queue(self, ctx: commands.Context):
-        pass
-        
-    async def callback(self, interaction: discord.Interaction):
+    async def callback(self,interaction: discord.Interaction):
         await interaction.response.send_message("Adding Track to Queue", delete_after=10)
-        
-        await interaction.message.delete()
+        try:
+            # await interaction.delete_original_response()
+            await interaction.message.delete()
+            self.view.value = self.value
+            self.view.stop()
+        except Exception as e:
+            print(e) 
 
 class OptionView(discord.ui.View):
+    __slots__ = ("dict1","dict2""dict3")
+    
     def __init__(self, args: dict):
-        super().__init__()
-        
+        super().__init__() 
+        self.value = None # this will store the button label
         self.dict1 = args[0]
         self.dict2 = args[1]
         self.dict3 = args[2]
         
-
-        self.add_item(OptionButton(self.dict1))
-        
-        self.add_item(OptionButton(self.dict2))
-
-        self.add_item(OptionButton(self.dict3))
-
+        self.add_item(OptionButton(self.dict1, 1))
+        self.add_item(OptionButton(self.dict2, 2))
+        self.add_item(OptionButton(self.dict3, 3))
     
     @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, row=4, disabled=False, emoji="✖️")
     async def close_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.message.delete()
-
-class SongSelectMenu(discord.ui.View):
-    def __init__(self, args: dict):
-        super().__init__()
-        self.args = args
-        track1 = args[0]["title"]
-
-        
-        # self.add_item(discord.ui.Button(label="Some Text"))
-
-    @discord.ui.button(label=f"Add Track", style=discord.ButtonStyle.blurple,row=1)
-    async def inviteBtn(self, interaction: discord.Interaction, button: discord.ui.Button):
-        # basically ctx.send
-        await interaction.response.send_message("Adding Track to Queue")
-        
-    @discord.ui.button(label="Add Track", style=discord.ButtonStyle.blurple,row=2)
-    async def inviteBtn2(
-        self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Adding Track to Queue")
+        self.stop()
+        await interaction.rersponse.send_message("the view is stopped")
     
-    @discord.ui.button(label="Add Track", style=discord.ButtonStyle.blurple, row=3)
-    async def inviteBtn3(
-        self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Adding Track to Queue")
-
-    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, row=4, disabled=False, emoji="✖️")
-    async def close_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.edit_message(view=None)
-
 class YoutubeSearchHandler:
     __slots__ = (
         "bot",
-        "foo"
+        "foo",
         "data"
     )
     
@@ -424,9 +401,7 @@ class Music(commands.Cog):
 
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(
-            ctx, search, loop=self.bot.loop, download=True
-        )
+        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
 
         await player.queue.put(source)
 
@@ -655,9 +630,12 @@ class Music(commands.Cog):
 
             menu_view = OptionView(result_dict) 
             await ctx.send(view=menu_view, delete_after=60)
-            
-            
-            await ctx.typing()
+            try:
+                await menu_view.wait()
+                print(menu_view.value)
+                # await ctx.typing()
+            except Exception as e:
+                print(e)
 
             vc = ctx.voice_client
 
@@ -675,7 +653,7 @@ class Music(commands.Cog):
 
             # If download is False, source will be a dict which will be used later to regather the stream.
             # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
+            source = await YTDLSource.create_source(ctx, menu_view.value, loop=self.bot.loop, download=True)
         
             await player.queue.put(source)
             
