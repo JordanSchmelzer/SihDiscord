@@ -9,8 +9,6 @@ Simplicity is an asynchronous music bot built off discord.py 2.0
 - custom command prefix support
 
 
-<!-- bootstrap:start -->
-
 ```lua
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
