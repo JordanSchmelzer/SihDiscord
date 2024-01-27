@@ -2,7 +2,7 @@ from discord.ext import commands
 
 
 class YoutubeSearchHandler:
-    __slots__ = ("bot", "foo", "data")
+    __slots__ = ("bot", "data")
 
     def __init__(self, ctx: commands.Context):
         __bot__ = self.bot

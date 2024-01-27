@@ -1,17 +1,19 @@
 from cls.youtube_downloader import *
 from cls.youtube_metadata_fetcher import *
-import asyncio
-import logging
+from Cogs.buttons import OptionView
+
 from asyncio import timeout
 from discord.ext import commands
-import discord
 from functools import partial
+from youtubesearchpython import VideosSearch  # pip install python-video-search
+
+import asyncio
+import discord
 import itertools
+import json
+import logging
 import sys
 import traceback
-from youtubesearchpython import VideosSearch  # pip install python-video-search
-import json
-import os
 
 
 ffmpegopts = {"before_options": "-nostdin", "options": "-vn"}
@@ -68,13 +70,8 @@ class MusicPlayer:
                 async with timeout(DOWNLOAD_TIMEOUT):
                     print("[TRACE]: Music player: waiting for next song")
                     source = await self.queue.get()
-                    print(
-                        "[TRACE]: Music player: song ended, getting new song from queue"
-                    )
-
             except asyncio.TimeoutError:
                 print(f"[FATAL]: exceeded timeout limit of {DOWNLOAD_TIMEOUT}")
-
                 return self.destroy(self._guild)
 
             self.current = source
@@ -91,13 +88,11 @@ class MusicPlayer:
             )
             await self.next.wait()
 
-            # Make sure the FFmpeg process is cleaned up.
-            source.cleanup()
+            source.cleanup()  # Make sure the FFmpeg process is cleaned up.
             self.current = None
 
             try:
-                # We are no longer playing this song...
-                await self.np.delete()
+                await self.np.delete()  # We are no longer playing this song...
             except discord.HTTPException:
                 pass
 
@@ -163,17 +158,39 @@ class Music(commands.Cog):
 
         return player
 
+    async def join(
+        self, ctx: commands.Context, *, channel: discord.VoiceChannel = None
+    ):
+        if not channel:
+            try:
+                channel = ctx.author.voice.channel
+            except AttributeError:
+                raise InvalidVoiceChannel(
+                    "No channel to join. Please either specify a valid channel or join one."
+                )
+
+        vc = ctx.voice_client
+
+        if vc:
+            if vc.channel.id == channel.id:
+                return
+            try:
+                await vc.move_to(channel)
+            except asyncio.TimeoutError:
+                raise VoiceConnectionError(f"Moving to channel: <{channel}> timed out.")
+        else:
+            try:
+                await channel.connect()
+            except asyncio.TimeoutError:
+                raise VoiceConnectionError(
+                    f"Connecting to channel: <{channel}> timed out."
+                )
+
+        await ctx.send(f"Connected to: **{channel}**", delete_after=20)
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self} connected to discord. ready for further action")
-
-    @commands.command()
-    async def cmds(self, ctx: commands.Context, args):
-        try:
-            view = OptionView(args)
-            await ctx.send(view=view, delete_after=300)
-        except Exception as e:
-            print(e)
 
     @commands.command()
     async def play(self, ctx: commands.Context, *, search: str):
@@ -401,18 +418,14 @@ class Music(commands.Cog):
         """
 
         LIMIT = 3
-
+        data = {}
         await ctx.send(f"Searching...", delete_after=3)
         try:
             video_search = VideosSearch(args, limit=LIMIT, region="US")
-            data = {}
             data = video_search.result()
-
-            with open("./src/data/video_data.json", "w") as f:
-                # json.dump(data,f, indent=4)
-                json.dump(data, f, indent=2)
-
-            # Extract info we care about into dict
+            # for debug only
+            # with open("./src/data/video_data.json", "w") as f:
+            # json.dump(data,f, indent=4)
             i = 0
             result_dict = {}
             while i <= (LIMIT - 1):
@@ -439,24 +452,13 @@ class Music(commands.Cog):
                 print(e)
 
             vc = ctx.voice_client
-
             if not vc:
                 await ctx.invoke(self.join)
 
-            """Retrieve the guild player, or generate one."""
-            player = self.get_player(ctx)
-
-            # TODO
-            # search is the video id that we want to download and queue
-            # need to figure out how to get it from the users choice of button click
-            # also need to figure out how to handle a canceled button
-
-            # If download is False, source will be a dict which will be used later to regather the stream.
-            # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
+            player = self.get_player(ctx)  # Retrieve the guild player, or generate one.
             source = await YTDLSource.create_source(
                 ctx, menu_view.value, loop=self.bot.loop, download=True
             )
-
             await player.queue.put(source)
 
         except Exception as e:

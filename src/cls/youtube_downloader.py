@@ -44,9 +44,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
     
     def __init__(self, source, *, data, requester):
         super().__init__(source)
-        __requester__ = requester
-        __title__ = data.get("title")
-        __web_url__ = data.get("webpage_url")
+        self.requester = requester
+        self.title = data.get("title")
+        self.web_url = data.get("webpage_url")
  
     @classmethod
     async def create_source(cls, ctx, search: str, *, loop, download=True):
@@ -57,10 +57,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
         no_data_to_run = partial(ytdl.extract_info, url=search, download=False)
         no_download_data = await loop.run_in_executor(None, no_data_to_run)
 
+        # stops playlists i think
         if "entries" in no_download_data:
-            no_download_data = no_download_data["entries"][0]
+              no_download_data = no_download_data["entries"][0]
 
-        # if not present, download it
+        # if not present download it, else use existing resource
         if os.path.exists(f'./src/Songs/{no_download_data["id"]}.mp3'):
             ytdl_download_opt = False
             

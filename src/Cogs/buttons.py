@@ -18,21 +18,31 @@ class InviteButtons(discord.ui.View):
 class OptionButton(discord.ui.Button):
     def __init__(self, data: dict, row: str):
         ROWNUM = int(row)
+
+        length = len(data["title"])
+        # buttons cannot be longer than 80 bytes
+        if length > 80:
+            button_title = data["title"][0:80]
+        else:
+            button_title = data["title"]
+
         super().__init__(
-            label=data["title"], style=discord.ButtonStyle.blurple, row=ROWNUM
+            label=button_title, style=discord.ButtonStyle.blurple, row=ROWNUM
         )
         self.value = data["id"]
         print(data["id"])
 
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.send_message(
-            "Adding Track to Queue", delete_after=10
+            "Please wait... Adding track to queue...", delete_after=5
         )
         try:
             # await interaction.delete_original_response()
             await interaction.message.delete()
-            self.view.value = self.value
-            self.view.stop()
+            self.view.value = (
+                self.value
+            )  # super important. sets the view to a value for logic in the calling funct
+            self.view.stop()  # kills the view for higher function call. await i think
         except Exception as e:
             print(e)
 
