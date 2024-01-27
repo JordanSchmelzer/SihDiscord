@@ -4,7 +4,6 @@ from Cogs.buttons import OptionView
 
 from asyncio import timeout
 from discord.ext import commands
-from functools import partial
 from youtubesearchpython import VideosSearch  # pip install python-video-search
 
 import asyncio
@@ -165,9 +164,8 @@ class Music(commands.Cog):
             try:
                 channel = ctx.author.voice.channel
             except AttributeError:
-                raise InvalidVoiceChannel(
-                    "No channel to join. Please either specify a valid channel or join one."
-                )
+                pass
+                # raise InvalidVoiceChannel("No channel to join. Please either specify a valid channel or join one.")
 
         vc = ctx.voice_client
 
@@ -177,14 +175,14 @@ class Music(commands.Cog):
             try:
                 await vc.move_to(channel)
             except asyncio.TimeoutError:
-                raise VoiceConnectionError(f"Moving to channel: <{channel}> timed out.")
+                pass
+                # raise VoiceConnectionError(f"Moving to channel: <{channel}> timed out.")
         else:
             try:
                 await channel.connect()
             except asyncio.TimeoutError:
-                raise VoiceConnectionError(
-                    f"Connecting to channel: <{channel}> timed out."
-                )
+                pass
+                # raise VoiceConnectionError(f"Connecting to channel: <{channel}> timed out.")
 
         await ctx.send(f"Connected to: **{channel}**", delete_after=20)
 
@@ -393,7 +391,7 @@ class Music(commands.Cog):
             logging.fatal(e)
 
     @commands.command()
-    async def search(self, ctx: commands.Context, args):
+    async def search(self, ctx: commands.Context, *args):
         """
         Getting information about video or its formats using video link or video ID.
 
@@ -416,12 +414,15 @@ class Music(commands.Cog):
         videoFormats = Video.getFormats('z0GKGpObgPY')
         print(videoFormats)
         """
-
+        # set constants
         LIMIT = 3
+        # process user args
+        search_string = " ".join(args)
+        # set variables
         data = {}
         await ctx.send(f"Searching...", delete_after=3)
         try:
-            video_search = VideosSearch(args, limit=LIMIT, region="US")
+            video_search = VideosSearch(search_string, limit=LIMIT, region="US")
             data = video_search.result()
             # for debug only
             # with open("./src/data/video_data.json", "w") as f:
@@ -446,10 +447,13 @@ class Music(commands.Cog):
             await ctx.send(view=menu_view, delete_after=60)
             try:
                 await menu_view.wait()
-                print(menu_view.value)
                 # await ctx.typing()
             except Exception as e:
                 print(e)
+
+            if menu_view.value == "cancel":
+                print("canceled search")
+                return
 
             vc = ctx.voice_client
             if not vc:
@@ -460,7 +464,6 @@ class Music(commands.Cog):
                 ctx, menu_view.value, loop=self.bot.loop, download=True
             )
             await player.queue.put(source)
-
         except Exception as e:
             print(e)
 

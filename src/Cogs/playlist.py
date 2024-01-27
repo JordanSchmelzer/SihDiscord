@@ -1,4 +1,7 @@
+from cls.youtube_downloader import *
+
 from discord.ext import commands
+
 import json
 import logging
 import random
@@ -18,13 +21,6 @@ class PlaylistCog(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self} connected to discord. ready for further action")
-
-    @commands.command()
-    async def emoji(self, ctx: commands.Context):
-        try:
-            await ctx.send(f"{self.bot.emojiList.false}")
-        except Exception as e:
-            print(e)
 
     @commands.command()
     async def my_playlist(self, ctx: commands.Context, arg1: str, *arg2: str):

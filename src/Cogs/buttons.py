@@ -68,5 +68,6 @@ class OptionView(discord.ui.View):
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         await interaction.message.delete()
+        self.value = "cancel"
         self.stop()
-        await interaction.rersponse.send_message("the view is stopped")
+        # await interaction.rersponse.send_message("the view is stopped")
