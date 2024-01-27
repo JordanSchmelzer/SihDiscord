@@ -1,9 +1,8 @@
 # 💤🎵 Simplicity Music 🎵💤
 
-Simplicity is a simple discord music bot built largely off of EveePy's music cog.
-This bot supports Cogs and is ready for you to tweak and tune to fit your needs.
+Simplicity is an asynchronous music bot built off discord.py 2.0
 
-## Features
+## ✨ Features ✨
 
 - Music queues
 - Play, pause, skip, resume, volume, queue info among other commands
