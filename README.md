@@ -9,6 +9,19 @@ Simplicity is an asynchronous music bot built off discord.py 2.0
 - custom command prefix support
 
 
-## NOT supported:
+<!-- bootstrap:start -->
 
-- Youtube streaming. This is because of Youtubes aggressive stream link expiration. If you can get it to work, please share!
+```lua
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+```
