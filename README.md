@@ -1,4 +1,4 @@
-# Simplicity Music
+# 💤🎵 Simplicity Music 🎵💤
 
 Simplicity is a simple discord music bot built largely off of EveePy's music cog.
 This bot supports Cogs and is ready for you to tweak and tune to fit your needs.
