@@ -1,3 +1,5 @@
+from cls.youtube_downloader import *
+from cls.youtube_metadata_fetcher import *
 import asyncio
 import logging
 from asyncio import timeout
@@ -7,169 +9,13 @@ from functools import partial
 import itertools
 import sys
 import traceback
-from youtube_dl import YoutubeDL
-from youtubesearchpython import VideosSearch
+from youtubesearchpython import VideosSearch  # pip install python-video-search
 import json
 import os
 
 
-# define ydl console behavoir
-def my_hook(d):
-    if d["status"] == "finished":
-        print("Done downloading, now converting ...")
-
-
-ydl_opts = {
-    "format": "bestaudio/best",
-    "outtmpl": "./src/Songs/%(id)s.%(ext)s",
-    "restrictfilenames": True,
-    "noplaylist": True,
-    "nocheckcertificate": True,
-    "postprocessors": [
-        {
-            "key": "FFmpegExtractAudio",
-            "preferredcodec": "mp3",
-            "preferredquality": "192",
-        }
-    ],
-    "ignoreerrors": False,
-    "logtostderr": False,
-    "quiet": True,
-    "no_warnings": True,
-    "default_search": "auto",
-    "source_address": "0.0.0.0",  # ipv6 addresses cause issues sometimes
-    #"proxy":"169.0.0.100:8080",
-}
-
 ffmpegopts = {"before_options": "-nostdin", "options": "-vn"}
 
-ytdl = YoutubeDL(ydl_opts)
-
-class VoiceConnectionError(commands.CommandError):
-    """Custom Exception class for connection errors."""
-
-
-class InvalidVoiceChannel(VoiceConnectionError):
-    """Exception for cases of invalid Voice Channels."""
-
-
-class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, requester):
-        super().__init__(source)
-        self.requester = requester
-
-        self.title = data.get("title")
-        self.web_url = data.get("webpage_url")
-
-        # YTDL info dicts (data) have other useful information you might want
-        # https://github.com/rg3/youtube-dl/blob/master/README.md
-
-    @classmethod
-    async def create_source(cls, ctx, search: str, *, loop, download=True):
-        print("[TRACE]: Youtube-DL: Creating Youtube Audio Source")
-        loop = loop or asyncio.get_event_loop()
-
-        # no_download_data
-        no_data_to_run = partial(ytdl.extract_info, url=search, download=False)
-        no_download_data = await loop.run_in_executor(None, no_data_to_run)
-
-        if "entries" in no_download_data:
-            no_download_data = no_download_data["entries"][0]
-
-        # if not present, download it
-        if os.path.exists(f'./src/Songs/{no_download_data["id"]}.mp3'):
-            ytdl_download_opt = False
-            
-            await ctx.send(
-                f'Added {no_download_data["title"]} to the Queue.', delete_after=15
-            )
-            
-            source = f'./src/Songs/{no_download_data["id"]}.mp3'
-            
-            print(f"[TRACE]: Youtoube-DL: Audio already ripped: id={no_download_data["id"]}")
-
-            return cls(
-                discord.FFmpegPCMAudio(source),
-                data=no_download_data,
-                requester=ctx.author,
-            )
-        else:
-            ytdl_download_opt = download
-            to_run = partial(ytdl.extract_info, url=search, download=ytdl_download_opt)
-            data = await loop.run_in_executor(None, to_run)
-
-            if "entries" in data:
-                # take first item from a playlist
-                data = data["entries"][0]
-
-            # TODO: clean this garbage up
-            if download:
-                # source = ytdl.prepare_filename(data)
-                source = f'./src/Songs/{data["id"]}.mp3'
-            else:
-                return {
-                    "webpage_url": data["webpage_url"],
-                    "requester": ctx.author,
-                    "title": data["title"],
-                }
-            print(f"[TRACE]: Youtube-DL: Audio Source Downloaded: id={data["id"]}")
-
-            return cls(discord.FFmpegPCMAudio(source), data=data, requester=ctx.author)
-
-class OptionButton(discord.ui.Button):
-    def __init__(self, data: dict, row: str):
-        ROWNUM=int(row)
-        super().__init__(label=data["title"], style=discord.ButtonStyle.blurple, row=ROWNUM)
-        self.value = data["id"]
-        print(data["id"])
-        
-    async def callback(self,interaction: discord.Interaction):
-        await interaction.response.send_message("Adding Track to Queue", delete_after=10)
-        try:
-            # await interaction.delete_original_response()
-            await interaction.message.delete()
-            self.view.value = self.value
-            self.view.stop()
-        except Exception as e:
-            print(e) 
-
-class OptionView(discord.ui.View):
-    __slots__ = ("dict1","dict2""dict3")
-    
-    def __init__(self, args: dict):
-        super().__init__() 
-        self.value = None # this will store the button label
-        self.dict1 = args[0]
-        self.dict2 = args[1]
-        self.dict3 = args[2]
-        
-        self.add_item(OptionButton(self.dict1, 1))
-        self.add_item(OptionButton(self.dict2, 2))
-        self.add_item(OptionButton(self.dict3, 3))
-    
-    @discord.ui.button(label="Cancel", style=discord.ButtonStyle.red, row=4, disabled=False, emoji="✖️")
-    async def close_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.message.delete()
-        self.stop()
-        await interaction.rersponse.send_message("the view is stopped")
-    
-class YoutubeSearchHandler:
-    __slots__ = (
-        "bot",
-        "foo",
-        "data"
-    )
-    
-    def __init__(self, ctx: commands.Context):
-        __bot__ = self.bot
-        print(__bot__)
-        __data__ = {}
-  
-    @classmethod
-    async def create_source(cls, ctx, search: str, *, loop, download=True, __data__):
-        print("[TRACE]: YoutubeSearch: searching for top n")
-  
-        return __data__
 
 class MusicPlayer:
     """A class which is assigned to each guild using the bot for Music.
@@ -212,24 +58,25 @@ class MusicPlayer:
 
         """Our main player loop."""
         await self.bot.wait_until_ready()
-        print('[TRACE]: Music player: bot is ready')
+        print("[TRACE]: Music player: bot is ready")
 
         while not self.bot.is_closed():
             self.next.clear()
 
             # Wait for the next song. If we timeout cancel the player and disconnect...
             try:
-                
                 async with timeout(DOWNLOAD_TIMEOUT):
-                    print('[TRACE]: Music player: waiting for next song')
+                    print("[TRACE]: Music player: waiting for next song")
                     source = await self.queue.get()
-                    print('[TRACE]: Music player: song ended, getting new song from queue')
-                    
+                    print(
+                        "[TRACE]: Music player: song ended, getting new song from queue"
+                    )
+
             except asyncio.TimeoutError:
                 print(f"[FATAL]: exceeded timeout limit of {DOWNLOAD_TIMEOUT}")
-                
+
                 return self.destroy(self._guild)
-            
+
             self.current = source
             source.volume = self.volume
 
@@ -255,7 +102,7 @@ class MusicPlayer:
                 pass
 
     def destroy(self, guild):
-        print(f'[TRACE]: Destroying Music Player attached to guild {guild}')
+        print(f"[TRACE]: Destroying Music Player attached to guild {guild}")
         """Disconnect and cleanup the player."""
         return self.bot.loop.create_task(self._cog.cleanup(guild))
 
@@ -268,10 +115,6 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.players = {}
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f"{self} connected to discord. ready for further action")
 
     async def cleanup(self, guild: commands.Context.guild):
         try:
@@ -320,6 +163,10 @@ class Music(commands.Cog):
 
         return player
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self} connected to discord. ready for further action")
+
     @commands.command()
     async def cmds(self, ctx: commands.Context, args):
         try:
@@ -327,55 +174,6 @@ class Music(commands.Cog):
             await ctx.send(view=view, delete_after=300)
         except Exception as e:
             print(e)
-        
-    @commands.command()
-    async def invite(self, ctx: commands.Context, args):
-        print("invite triggered")
-        try:
-            results = {"hello":"world"}
-            buttons = SongSelectMenu(results)
-            await ctx.send("click the thing", view=buttons) 
-        except Exception as e:
-            print(e)
-
-    @commands.command()
-    async def join(
-        self, ctx: commands.Context, *, channel: discord.VoiceChannel = None
-    ):
-        """Connect to voice.
-        Parameters
-        ------------
-        channel: discord.VoiceChannel [Optional]
-            The channel to connect to. If a channel is not specified, an attempt to join the voice channel you are in
-            will be made.
-        This command also handles moving the bot to different channels.
-        """
-        if not channel:
-            try:
-                channel = ctx.author.voice.channel
-            except AttributeError:
-                raise InvalidVoiceChannel(
-                    "No channel to join. Please either specify a valid channel or join one."
-                )
-
-        vc = ctx.voice_client
-
-        if vc:
-            if vc.channel.id == channel.id:
-                return
-            try:
-                await vc.move_to(channel)
-            except asyncio.TimeoutError:
-                raise VoiceConnectionError(f"Moving to channel: <{channel}> timed out.")
-        else:
-            try:
-                await channel.connect()
-            except asyncio.TimeoutError:
-                raise VoiceConnectionError(
-                    f"Connecting to channel: <{channel}> timed out."
-                )
-
-        await ctx.send(f"Connected to: **{channel}**", delete_after=20)
 
     @commands.command()
     async def play(self, ctx: commands.Context, *, search: str):
@@ -401,7 +199,9 @@ class Music(commands.Cog):
 
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=True)
+        source = await YTDLSource.create_source(
+            ctx, search, loop=self.bot.loop, download=True
+        )
 
         await player.queue.put(source)
 
@@ -528,16 +328,18 @@ class Music(commands.Cog):
     async def stop(self, ctx: commands.Context):
         """Stop the currently playing song and destroy the player.
         !Warning!
-            This will destroy the player assigned to your guild, also deleting any queued songs and settings.
+        This will destroy the player assigned to your guild, also deleting any queued songs and settings.
         """
-        vc = ctx.voice_client
-
-        if not vc or not vc.is_connected():
-            return await ctx.send(
-                "I am not currently playing anything!", delete_after=20
-            )
-
-        await self.cleanup(ctx.guild)
+        try:
+            vc = ctx.voice_client
+            if not vc or not vc.is_connected():
+                return await ctx.send(
+                    "I am not currently playing anything!", delete_after=20
+                )
+            await self.cleanup(ctx.guild)
+            print(f"[warn][music] method stop has stopped the player and left voice")
+        except Exception as e:
+            print(f"[fatal][music] method stop failed for exception:{e}")
 
     @commands.command()
     async def playlist(self, ctx: commands.Context):
@@ -575,7 +377,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def search(self, ctx: commands.Context, args):
-        '''
+        """
         Getting information about video or its formats using video link or video ID.
 
         `Video.get` method will give both information & formats of the video
@@ -588,47 +390,46 @@ class Music(commands.Cog):
         This is disabled by default as it is very inefficient, but if you really need it, you can explicitly set parameter to Video.get() function: get_upload_date=True
         By default, we use InnerTube API for Video.get() and Video.getFormats(), meanwhile we use HTML parsing on Video.getInfo()
         You can set get_upload_date ONLY TO Video.get(), as you don't get info with Video.getFormats()
-        
-        
+
+
         video = Video.get('https://www.youtube.com/watch?v=z0GKGpObgPY', mode = ResultMode.json, get_upload_date=True)
         print(video)
         videoInfo = Video.getInfo('https://youtu.be/z0GKGpObgPY', mode = ResultMode.json)
         print(videoInfo)
         videoFormats = Video.getFormats('z0GKGpObgPY')
         print(videoFormats)
-        '''
-        
+        """
+
         LIMIT = 3
-        
+
         await ctx.send(f"Searching...", delete_after=3)
         try:
-
-            video_search = VideosSearch(args, limit=LIMIT, region='US')
+            video_search = VideosSearch(args, limit=LIMIT, region="US")
             data = {}
             data = video_search.result()
-            
-            with open('./src/data/video_data.json',"w") as f:
+
+            with open("./src/data/video_data.json", "w") as f:
                 # json.dump(data,f, indent=4)
                 json.dump(data, f, indent=2)
-                
+
             # Extract info we care about into dict
             i = 0
             result_dict = {}
-            while(i <= (LIMIT - 1)):
-                data_id = data["result"][i]['id']
+            while i <= (LIMIT - 1):
+                data_id = data["result"][i]["id"]
                 data_title = data["result"][i]["title"]
                 data_duration = data["result"][i]["duration"]
                 data_views = data["result"][i]["viewCount"]["text"]
                 this_result_dict = {
                     "id": data_id,
-                    "title":data_title,
+                    "title": data_title,
                     "duration": data_duration,
-                    "views": data_views
+                    "views": data_views,
                 }
                 result_dict[i] = this_result_dict
-                i= i + 1
+                i = i + 1
 
-            menu_view = OptionView(result_dict) 
+            menu_view = OptionView(result_dict)
             await ctx.send(view=menu_view, delete_after=60)
             try:
                 await menu_view.wait()
@@ -645,20 +446,22 @@ class Music(commands.Cog):
             """Retrieve the guild player, or generate one."""
             player = self.get_player(ctx)
 
-
-            #TODO
-            #search is the video id that we want to download and queue
-            #need to figure out how to get it from the users choice of button click
-            #also need to figure out how to handle a canceled button
+            # TODO
+            # search is the video id that we want to download and queue
+            # need to figure out how to get it from the users choice of button click
+            # also need to figure out how to handle a canceled button
 
             # If download is False, source will be a dict which will be used later to regather the stream.
             # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-            source = await YTDLSource.create_source(ctx, menu_view.value, loop=self.bot.loop, download=True)
-        
+            source = await YTDLSource.create_source(
+                ctx, menu_view.value, loop=self.bot.loop, download=True
+            )
+
             await player.queue.put(source)
-            
+
         except Exception as e:
             print(e)
+
 
 async def setup(bot):
     await bot.add_cog(Music(bot))

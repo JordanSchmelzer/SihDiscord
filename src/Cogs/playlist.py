@@ -11,7 +11,7 @@ def validate_arg(arg, type="url"):
     return True
 
 
-class CommandsCog(commands.Cog):
+class PlaylistCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
@@ -126,4 +126,4 @@ class CommandsCog(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(CommandsCog(bot))
+    await bot.add_cog(PlaylistCog(bot))

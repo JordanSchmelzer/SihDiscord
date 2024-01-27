@@ -7,7 +7,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'{self} connected to discord. ready for further action')
+        print(f"{self} connected to discord. ready for further action")
 
     @commands.command()
     async def ping(self, ctx: commands.Context):
@@ -17,7 +17,7 @@ class Events(commands.Cog):
     async def on_member_join(self, member):
         await member.create_dm()
         await member.dm_channel.send(
-            f'Hello {member.name}, welcome to my DEV environment!'
+            f"Hello {member.name}, welcome to my DEV environment!"
         )
 
 

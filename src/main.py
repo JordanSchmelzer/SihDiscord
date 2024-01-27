@@ -7,10 +7,6 @@ import logging
 import json
 
 
-# import youtube_dl pip install git+https://github.com/ytdl-org/youtube-dl.git@master#egg=youtube_dl
-# you have to use this one or it wont work. i think the germans took it down
-
-
 def get_prefix(bot, message):
     """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
@@ -80,11 +76,12 @@ async def load_extensions():
     # Below Cogs represents our folder our Cogs are in. Following is the file name. So 'meme.py' in Cogs,
     # would be Cogs.meme Think of it like a dot path import
     initial_extensions = [
-        "Cogs.cmds",
         "Cogs.events",
         "Cogs.music",
         "Cogs.help",
-        # "Cogs.",
+        "Cogs.joinleave",
+        "Cogs.playlist",
+        "Cogs.invite",
     ]
     # Here we load our extensions(Cogs) listed above in [initial_extensions].
     if __name__ == "__main__":
